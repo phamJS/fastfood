@@ -13,6 +13,8 @@ COPY pom.xml .
 COPY src src
 
 # Build ứng dụng Spring Boot
+RUN sed -i 's/\r$//' mvnw # Xóa ký tự carriage return
+RUN chmod +x ./mvnw
 RUN ./mvnw clean install
 
 # --- Giai đoạn chạy ứng dụng (Sử dụng một JRE nhỏ hơn để giảm kích thước image) ---
