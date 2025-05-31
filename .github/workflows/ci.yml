@@ -1,0 +1,59 @@
+# Tên của workflow, hiển thị trên giao diện GitHub Actions
+name: CI cho Dự án Spring Boot
+
+# Khi nào workflow này sẽ được kích hoạt
+on:
+  # Kích hoạt khi có một push (đẩy mã) lên nhánh 'main' hoặc 'develop'
+  push:
+    branches:
+      - main
+      - develop
+  # Kích hoạt khi có một Pull Request được mở hoặc cập nhật đến nhánh 'main' hoặc 'develop'
+  pull_request:
+    branches:
+      - main
+      - develop
+
+# Các "công việc" (jobs) mà workflow này sẽ chạy
+jobs:
+  # Định nghĩa một công việc có tên là 'build-and-test'
+  build-and-test:
+    # Chọn hệ điều hành để chạy công việc này
+    # Ubuntu là lựa chọn phổ biến và hiệu quả về chi phí
+    runs-on: ubuntu-latest
+
+    # Các bước (steps) trong công việc 'build-and-test'
+    steps:
+      # Bước 1: Checkout mã nguồn từ kho lưu trữ
+      # Action này giúp lấy mã nguồn của bạn vào môi trường chạy workflow
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      # Bước 2: Thiết lập môi trường Java
+      # 'setup-java' action giúp cài đặt JDK cần thiết
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          java-version: '17' # Chọn phiên bản JDK bạn đang dùng cho Spring Boot (ví dụ: 11, 17, 21)
+          distribution: 'temurin' # Một bản phân phối JDK mã nguồn mở đáng tin cậy
+          cache: maven # Kích hoạt bộ nhớ đệm cho Maven để tăng tốc độ build
+
+      # Bước 3: Chạy các bài kiểm thử (Unit Tests, Integration Tests) và build dự án
+      # Lệnh 'mvn clean install' sẽ làm các việc sau:
+      # - 'clean': Xóa các file build cũ
+      # - 'install': Biên dịch mã, chạy tất cả các bài kiểm thử, và đóng gói ứng dụng
+      - name: Build with Maven and Run Tests
+        run: mvn clean install
+
+      # Bước 4 (Tùy chọn): Upload Artifact (file JAR/WAR)
+      # Bước này hữu ích nếu bạn muốn lưu trữ file build sau khi CI thành công
+      # để sử dụng cho giai đoạn CD sau này.
+      - name: Upload JAR artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: spring-boot-app # Tên của artifact
+          # Đường dẫn đến file JAR/WAR của bạn
+          # Thường là target/*.jar hoặc target/*.war sau khi mvn install
+          path: target/*.jar
+          # If you want to retain this artifact for a specific duration (e.g., 5 days)
+          # retain-days: 5
