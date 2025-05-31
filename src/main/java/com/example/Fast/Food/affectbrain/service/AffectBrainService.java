@@ -7,4 +7,7 @@ import org.springframework.stereotype.Service;
 @AllArgsConstructor
 public class AffectBrainService {
 
+    public Integer calculateSumOfTwoNumbers(Integer a, Integer b) {
+        return a + b;
+    }
 }
