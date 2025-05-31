@@ -6,12 +6,12 @@ on:
   # Kích hoạt khi có một push (đẩy mã) lên nhánh 'main' hoặc 'develop'
   push:
     branches:
-      - main
+      - master
       - develop
   # Kích hoạt khi có một Pull Request được mở hoặc cập nhật đến nhánh 'main' hoặc 'develop'
   pull_request:
     branches:
-      - main
+      - master
       - develop
 
 # Các "công việc" (jobs) mà workflow này sẽ chạy
