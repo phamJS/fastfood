@@ -13,7 +13,7 @@ COPY pom.xml .
 COPY src src
 
 # Build ứng dụng Spring Boot
-RUN ./mvnw clean package -DskipTests
+RUN ./mvnw clean install
 
 # --- Giai đoạn chạy ứng dụng (Sử dụng một JRE nhỏ hơn để giảm kích thước image) ---
 FROM eclipse-temurin:17-jre-jammy
